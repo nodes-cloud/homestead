@@ -1,5 +1,5 @@
 ---
-ip: "192.168.10.10"
+ip: "192.168.10.15"
 memory: 2048
 cpus: 1
 provider: virtualbox
@@ -9,16 +9,9 @@ authorize: ~/.ssh/id_rsa.pub
 keys:
     - ~/.ssh/id_rsa
 
-folders:
-    - map: ~/Code
-      to: /home/vagrant/Code
-
-sites:
-    - map: homestead.app
-      to: /home/vagrant/Code/Laravel/public
-
-databases:
-    - homestead
+#folders:
+#    - map: ~/nodes-projects
+#      to: /var/www
 
 # blackfire:
 #     - id: foo
