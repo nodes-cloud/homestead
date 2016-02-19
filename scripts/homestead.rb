@@ -15,7 +15,7 @@ class Homestead
     # Configure The Box
     config.vm.box = settings["box"] ||= "laravel/homestead"
     config.vm.box_version = settings["version"] ||= ">= 0.4.0"
-    config.vm.hostname = settings["hostname"] ||= "homestead"
+    config.vm.hostname = settings["hostname"] ||= "nhomestead"
 
     # Configure A Private Network IP
     config.vm.network :private_network, ip: settings["ip"] ||= "192.168.10.10"
@@ -29,7 +29,7 @@ class Homestead
 
     # Configure A Few VirtualBox Settings
     config.vm.provider "virtualbox" do |vb|
-      vb.name = settings["name"] ||= "homestead-7"
+      vb.name = settings["name"] ||= "nhomestead-7"
       vb.customize ["modifyvm", :id, "--memory", settings["memory"] ||= "2048"]
       vb.customize ["modifyvm", :id, "--cpus", settings["cpus"] ||= "1"]
       vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
@@ -40,7 +40,7 @@ class Homestead
     # Configure A Few VMware Settings
     ["vmware_fusion", "vmware_workstation"].each do |vmware|
       config.vm.provider vmware do |v|
-        v.vmx["displayName"] = "homestead"
+        v.vmx["displayName"] = "nhomestead"
         v.vmx["memsize"] = settings["memory"] ||= 2048
         v.vmx["numvcpus"] = settings["cpus"] ||= 1
         v.vmx["guestOS"] = "ubuntu-64"
@@ -129,64 +129,11 @@ class Homestead
       end
     end
 
-    # Install All The Configured Nginx Sites
-    config.vm.provision "shell" do |s|
-        s.path = scriptDir + "/clear-nginx.sh"
-    end
-
-
-    settings["sites"].each do |site|
-      type = site["type"] ||= "laravel"
-
-      if (site.has_key?("hhvm") && site["hhvm"])
-        type = "hhvm"
-      end
-
-      if (type == "symfony")
-        type = "symfony2"
-      end
-
-      config.vm.provision "shell" do |s|
-        s.path = scriptDir + "/serve-#{type}.sh"
-        s.args = [site["map"], site["to"], site["port"] ||= "80", site["ssl"] ||= "443"]
-      end
-
-      # Configure The Cron Schedule
-      if (site.has_key?("schedule"))
-        config.vm.provision "shell" do |s|
-          if (site["schedule"])
-            s.path = scriptDir + "/cron-schedule.sh"
-            s.args = [site["map"].tr('^A-Za-z0-9', ''), site["to"]]
-          else
-            s.inline = "rm -f /etc/cron.d/$1"
-            s.args = [site["map"].tr('^A-Za-z0-9', '')]
-          end
-        end
-      end
-
-    end
-
     # Install MariaDB If Necessary
     if settings.has_key?("mariadb") && settings["mariadb"]
       config.vm.provision "shell" do |s|
         s.path = scriptDir + "/install-maria.sh"
       end
-    end
-
-
-    # Configure All Of The Configured Databases
-    if settings.has_key?("databases")
-        settings["databases"].each do |db|
-          config.vm.provision "shell" do |s|
-            s.path = scriptDir + "/create-mysql.sh"
-            s.args = [db]
-          end
-
-          config.vm.provision "shell" do |s|
-            s.path = scriptDir + "/create-postgres.sh"
-            s.args = [db]
-          end
-        end
     end
 
     # Configure All Of The Server Environment Variables
