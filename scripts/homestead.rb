@@ -15,7 +15,7 @@ class Homestead
     # Configure The Box
     config.vm.box = settings["box"] ||= "laravel/homestead"
     config.vm.box_version = settings["version"] ||= ">= 0.4.0"
-    config.vm.hostname = settings["hostname"] ||= "nhomestead"
+    config.vm.hostname = settings["hostname"] ||= "nhomestead-71"
 
     # Configure A Private Network IP
     config.vm.network :private_network, ip: settings["ip"] ||= "192.168.10.10"
@@ -29,7 +29,7 @@ class Homestead
 
     # Configure A Few VirtualBox Settings
     config.vm.provider "virtualbox" do |vb|
-      vb.name = settings["name"] ||= "nhomestead-7"
+      vb.name = settings["name"] ||= "nhomestead-71"
       vb.customize ["modifyvm", :id, "--memory", settings["memory"] ||= "2048"]
       vb.customize ["modifyvm", :id, "--cpus", settings["cpus"] ||= "1"]
       vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
