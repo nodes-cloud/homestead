@@ -26,6 +26,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         config.vm.provision "shell", path: afterScriptPath
     end
         
-    config.vm.provision :shell, :inline => "service apache2 start", run: "always"
+   # config.vm.provision :shell, :inline => "service apache2 start", run: "always"
     
 end
