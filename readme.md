@@ -1,3 +1,6 @@
+# Installation
+https://github.com/nodes-cloud/homestead/wiki
+
 # Laravel Homestead
 
 The official Laravel local development environment.
